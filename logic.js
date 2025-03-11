@@ -1,18 +1,19 @@
 // Navigation handling
 function showSection(sectionId) {
-  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
-  document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active-button'));
-  document.getElementById(sectionId).classList.add('active-section');
-  event.currentTarget.classList.add('active-button');
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+    document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active-button'));
+    document.getElementById(sectionId).classList.add('active-section');
+    event.currentTarget.classList.add('active-button');
 }
 
-// Link to your published Google Sheet CSV
-const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?output=csv';
+// Sheet URLs
+const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?output=csv';
+const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&output=csv';
 
 // Team mapping configuration
 const teamMapping = {
     'Inter Milan': 'inter-milan',
-    'Liverpool': 'liverpool', // Updated key to match the table
+    'Liverpool': 'liverpool',
     'AC Milan': 'AC-milan',
     'Real Madrid': 'Real-madrid',
     'Bayern Munich': 'bayern',
@@ -21,108 +22,126 @@ const teamMapping = {
     'Manchester City': 'Manchester',
     'Barcelona': 'Barcelona',
     'Chelsea': 'Chelsea'
-  };
+};
 
-// Fetch and update data
+// Main data fetching function
 async function fetchData() {
-  try {
-      const response = await axios.get(sheetURL);
-      const parsed = Papa.parse(response.data, { header: true });
-      updateTeamData(parsed.data);
-  } catch (error) {
-      console.error('Error fetching data:', error);
-  }
+    try {
+        // Fetch and process main team data
+        const mainResponse = await axios.get(mainSheetURL);
+        const mainData = Papa.parse(mainResponse.data, { header: true });
+        updateTeamData(mainData.data);
+        
+        // Fetch and process top players data
+        const topPlayersResponse = await axios.get(topPlayersSheetURL);
+        const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
+        updateTopPlayersTable(topPlayersData.data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
+// Update team data and standings
 function updateTeamData(players) {
-  // Clear existing data
-  document.querySelectorAll('.team-group').forEach(team => {
-      team.querySelectorAll('.member-card').forEach(card => card.remove());
-  });
+    // Clear existing team cards
+    document.querySelectorAll('.team-group').forEach(team => {
+        team.querySelectorAll('.member-card').forEach(card => card.remove());
+    });
 
-  // Group players and calculate points
-  const grouped = players.reduce((acc, player) => {
-      const teamId = teamMapping[player.Team];
-      if (!acc[teamId]) acc[teamId] = [];
-      acc[teamId].push(player);
-      return acc;
-  }, {});
+    // Group players by team
+    const grouped = players.reduce((acc, player) => {
+        const teamId = teamMapping[player.Team];
+        if (teamId) {
+            if (!acc[teamId]) acc[teamId] = [];
+            acc[teamId].push(player);
+        }
+        return acc;
+    }, {});
 
-  // Calculate team points
-  const teamPoints = {};
-  Object.entries(grouped).forEach(([teamId, players]) => {
-      const totalPoints = players.reduce((sum, player) => sum + parseFloat(player.Rate || 0), 0);
-      teamPoints[teamId] = Math.round(totalPoints);
-  });
+    // Calculate team points
+    const teamPoints = {};
+    Object.entries(grouped).forEach(([teamId, players]) => {
+        const totalPoints = players.reduce((sum, player) => sum + parseFloat(player.Rate || 0), 0);
+        teamPoints[teamId] = Math.round(totalPoints);
+    });
 
-  // Update team rosters
-  Object.entries(grouped).forEach(([teamId, players]) => {
-      const teamSection = document.getElementById(teamId);
-      if (!teamSection) return;
+    // Update team rosters
+    Object.entries(grouped).forEach(([teamId, players]) => {
+        const teamSection = document.getElementById(teamId);
+        if (teamSection) {
+            players.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'member-card';
+                card.innerHTML = `
+                    <div class="player-number">${player.Number}</div>
+                    <div>${player.Name}</div>
+                    <div class="scout-rating">⭐ ${player.Rate}</div>
+                `;
+                teamSection.appendChild(card);
+            });
+        }
+    });
 
-      players.forEach(player => {
-          const card = document.createElement('div');
-          card.className = 'member-card';
-          card.innerHTML = `
-              <div class="player-number">${player.Number}</div>
-              <div>${player.Name}</div>
-              <div class="scout-rating">⭐ ${player.Rate}</div>
-          `;
-          teamSection.appendChild(card);
-      });
-  });
-
-  // Update standings table
-  updateStandings(teamPoints);
+    // Update standings table
+    updateStandings(teamPoints);
 }
 
+// Update league standings
 function updateStandings(teamPoints) {
-  const tableBody = document.querySelector('.scouting-table tbody');
-  const rows = Array.from(tableBody.querySelectorAll('tr'));
-  const teamMap = Object.entries(teamMapping).reduce((acc, [name, id]) => {
-      acc[id] = name;
-      return acc;
-  }, {});
+    const tableBody = document.querySelector('.scouting-table tbody');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
 
-  // Update points and create sorting array
-  const standings = rows.map(row => {
-      const teamId = teamMapping[row.children[1].textContent];
-      const points = teamPoints[teamId] || 0;
-      row.children[2].textContent = points;
-      return { row, points };
-  });
+    const standings = rows.map(row => {
+        const teamName = row.children[1].textContent;
+        const teamId = teamMapping[teamName];
+        const points = teamPoints[teamId] || 0;
+        return { row, points };
+    });
 
-  // Sort standings
-  standings.sort((a, b) => b.points - a.points || a.row.children[1].textContent.localeCompare(b.row.children[1].textContent));
+    // Sort standings by points
+    standings.sort((a, b) => b.points - a.points);
 
-  // Update positions and reinsert rows
-  standings.forEach((standing, index) => {
-      const row = standing.row;
-      row.children[0].textContent = index + 1;
-      
-      // Add inter-row class to first place team
-      if (index === 0 || index === 1 || index === 2) {
-          row.classList.add('inter-row');
-      } else {
-          row.classList.remove('inter-row');
-      }
-      tableBody.appendChild(row);
-  });
+    // Update table positions
+    standings.forEach((standing, index) => {
+        const row = standing.row;
+        row.children[0].textContent = index + 1;
+        row.children[2].textContent = standing.points;
+        row.classList.toggle('inter-row', index < 3);
+        tableBody.appendChild(row);
+    });
 }
 
-// Initial load and auto-refresh
-fetchData();
-setInterval(fetchData, 300000);
+// Update top players table
+function updateTopPlayersTable(players) {
+    const tbody = document.getElementById('top-players-body');
+    tbody.innerHTML = '';
 
-// Card hover effects
+    // Display first 11 players from the sheet
+    players.slice(0, 11).forEach(player => {
+        const row = document.createElement('tr');
+        row.className = 'top-player-row';
+        row.innerHTML = `
+            <td>${player.Rank}</td>
+            <td>${player['Player Name']}</td>
+            <td>${player.Team}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Event listeners for card hover effects
 document.addEventListener('mouseover', e => {
-  if (e.target.closest('.member-card')) {
-      e.target.closest('.member-card').style.transform = 'translateX(10px)';
-  }
+    const card = e.target.closest('.member-card');
+    if (card) card.style.transform = 'translateX(10px)';
 });
 
 document.addEventListener('mouseout', e => {
-  if (e.target.closest('.member-card')) {
-      e.target.closest('.member-card').style.transform = 'translateX(0)';
-  }
+    const card = e.target.closest('.member-card');
+    if (card) card.style.transform = 'translateX(0)';
+});
+
+// Initial setup
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+    setInterval(fetchData, 300000); // Refresh every 5 minutes
 });
