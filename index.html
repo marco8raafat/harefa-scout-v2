@@ -15,6 +15,8 @@
     --inter-blue: #0068A8;
     --inter-black: #000000;
     --inter-gold: #FFD700;
+    --inter-green: #4dff00;
+    --inter-red: #ff1900;
     --inter-accent: #8B0000;
 }
 
@@ -256,7 +258,10 @@ body {
     background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 95%, var(--inter-gold));
     font-weight: 600;
 }
-
+.inter-sec td {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 95%, var(--inter-green));
+    font-weight: 600;
+}
 .form-cells {
     display: flex;
     gap: 0.3rem;
@@ -311,6 +316,18 @@ padding-left: 20px;
         padding: 1rem;
     }
 }
+
+/* Add to existing CSS */
+.top-player-row td {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 95%, var(--inter-gold));
+    font-weight: 600;
+}
+
+.gold-star {
+    color: var(--inter-gold);
+    margin-left: 5px;
+}
+
 </style>
 </head>
 <body>
@@ -334,6 +351,9 @@ padding-left: 20px;
         </button>
         <button class="nav-button" onclick="showSection('table')">
             📊 Live Standings
+        </button>
+        <button class="nav-button" onclick="showSection('top-players')">
+            🏆 Top Players
         </button>
     </div>
 
@@ -445,11 +465,10 @@ padding-left: 20px;
                 </tr>
             </thead>
             <tbody>
-                <tr class="inter-row">
+                <tr>
                     <td>1</td>
                     <td>Inter Milan</td>
                     <td>22</td>
-
                 </tr>
                 <tr>
                     <td>2</td>
@@ -508,6 +527,23 @@ padding-left: 20px;
             </tbody>
         </table>
     </div>
+
+    <!-- Add new section below Live Standings -->
+    <div id="top-players" class="content-section">
+        <table class="scouting-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player Name</th>
+                    <th>Team</th>
+                </tr>
+            </thead>
+            <tbody id="top-players-body">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
     <footer class="footer">
         <p>&copy; 2025 Marco Raafat
           <a id="linkedin" href="https://www.linkedin.com/in/marco-raafat-714885304/" target="_blank" title="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
@@ -515,6 +551,6 @@ padding-left: 20px;
         </p>
     </footer>
     
-    <script src="logic.js"></script>
+    <script src="option-js.js"></script>
 </body>
 </html>
