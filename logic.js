@@ -7,8 +7,8 @@ function showSection(sectionId) {
 }
 
 // Sheet URLs
-const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?output=csv';
-const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&output=csv';
+const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=0&single=true&output=csv';
+const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&single=true&output=csv';
 
 // Team mapping configuration
 const teamMapping = {
@@ -144,4 +144,29 @@ document.addEventListener('mouseout', e => {
 document.addEventListener('DOMContentLoaded', () => {
     fetchData();
     setInterval(fetchData, 300000); // Refresh every 5 minutes
+});
+
+document.getElementById('playerSearch').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    
+    document.querySelectorAll('.member-card').forEach(card => {
+        const playerName = card.querySelector('div:nth-child(2)').textContent.toLowerCase();
+        const teamId = card.closest('.team-group').id.toLowerCase(); // Team ID (e.g., "ac-milan")
+        const teamName = card.closest('.team-group').querySelector('.team-title')
+                          .textContent.toLowerCase(); // Team name (e.g., "AC Milan")
+        
+        // Check if search term matches player name, team ID, or team name
+        const showCard = playerName.includes(searchTerm) || 
+                        teamId.includes(searchTerm) || 
+                        teamName.includes(searchTerm);
+        
+        card.style.display = showCard ? 'grid' : 'none';
+    });
+
+    document.querySelectorAll('.team-group').forEach(team => {
+        const hasVisiblePlayers = Array.from(team.querySelectorAll('.member-card'))
+            .some(card => card.style.display !== 'none');
+        
+        team.style.display = hasVisiblePlayers ? 'block' : 'none';
+    });
 });
