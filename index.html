@@ -46,6 +46,9 @@ body {
     border-bottom: 3px solid var(--inter-gold);
     position: relative;
     overflow: hidden;
+    /* background:url(./images/img1.jpg); */
+    /* background-size:cover; */
+    /* color:#000000 */
 }
 
 .main-header::before {
@@ -55,13 +58,13 @@ body {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: repeating-linear-gradient(
+    /* background: repeating-linear-gradient(
         45deg,
         transparent,
         transparent 15px,
         var(--inter-gold) 15px,
         var(--inter-gold) 30px
-    );
+    ); */
     opacity: 0.1;
     pointer-events: none;
 }
@@ -70,17 +73,19 @@ body {
 .nav-buttons {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 3rem;
+    padding: 1rem;
     background: rgba(0, 0, 0, 0.95);
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    
 }
 
 .nav-button {
-    padding: 1rem 2rem;
+    flex:1;
+    padding: 0.5rem 2rem;
     background: var(--inter-black);
     border: 2px solid var(--inter-blue);
     border-radius: 8px;
@@ -92,6 +97,7 @@ body {
     position: relative;
     overflow: hidden;
 }
+
 
 .nav-button::before {
     content: '';
@@ -167,6 +173,7 @@ body {
 .team-title::before {
     content: '⚽';
     font-size: 1.2em;
+    /* animation: pulse 1s infinite ; */
 }
 
 .member-card {
@@ -216,7 +223,9 @@ body {
 }
 
 .photo-card:hover {
-    transform: translateY(-5px);
+    /* transform: translateY(-5px); */
+    scale: 1.05; 
+    /* update zoom */
 }
 
 .photo-card img {
@@ -241,7 +250,7 @@ body {
 .scouting-table th {
     background: linear-gradient(var(--inter-blue), var(--inter-black));
     padding: 1.2rem;
-    position: sticky;
+    /* position: sticky; */
     top: 76px;
     backdrop-filter: blur(5px);
     border-bottom: 3px solid var(--inter-gold);
@@ -276,6 +285,75 @@ body {
     justify-content: center;
     font-size: 0.8em;
 }
+/* new section */
+/* Rules Section Styling */
+.rules-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.rules-list li {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: rgba(0, 104, 168, 0.1);
+    border-left: 3px solid var(--inter-gold);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.rules-list li:hover {
+    transform: translateX(10px);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.rules-list .fa-futbol {
+    font-size: 0.8em;
+    color: var(--inter-gold);
+    min-width: 20px;
+}
+/* Add this to the CSS section */
+.search-container {
+    position: relative; /* Add this to make absolute positioning work */
+    padding: 0.5rem 1rem;
+    display: flex;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.search-icon {
+    position: absolute;
+    right: 1.5rem; /* Adjust this value to align the icon properly */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none; /* Ensure the icon doesn't interfere with input */
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-bar {
+    width: 100%;
+    padding: 0.5rem 2.5rem 0.5rem 1rem; /* Add padding on the right for the icon */
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--inter-blue);
+    border-radius: 25px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: var(--inter-gold);
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.search-bar::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 footer {
 position: fixed;
 bottom: 0;
@@ -303,18 +381,31 @@ padding-left: 20px;
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulse {
+  0% {
+    
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-buttons {
-        flex-direction: column;
+        /* flex-direction:column; */
+        /* text-align: center; */
         gap: 0.5rem;
         padding: 0.5rem;
     }
-    
+    .nav-button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
     .content-section {
         margin: 1rem;
         padding: 1rem;
     }
+    
 }
 
 /* Add to existing CSS */
@@ -333,7 +424,7 @@ padding-left: 20px;
 <body>
     <header class="main-header">
         <h1>
-            <img src="images/imgLogo.jpg" alt="Inter Logo" style="height: 60px; vertical-align: middle; border-radius: 50%;
+            <img src="images/imgLogo.jpg" alt="7arefa Logo" style="height: 60px; vertical-align: middle; border-radius: 50%;
             width: 50px; 
             object-fit: cover; 
             height: 50px;">
@@ -344,23 +435,31 @@ padding-left: 20px;
 
     <div class="nav-buttons">
         <button class="nav-button active-button" onclick="showSection('teams')">
-            🔍 Team Analysis
+            🔍<br>Teams
         </button>
         <button class="nav-button" onclick="showSection('photos')">
-            📸 Match Evidence
+            📸<br>Photos
         </button>
         <button class="nav-button" onclick="showSection('table')">
-            📊 Live Standings
+            📊<br>Table
         </button>
         <button class="nav-button" onclick="showSection('top-players')">
-            🏆 Top Players
+            🏆<br>Top11
         </button>
+        <!-- <button class="nav-button" onclick="showSection('rules')">
+            📜<br>Rules
+        </button> -->
     </div>
 
     <!-- Team Analysis Section -->
     <div id="teams" class="content-section active-section">
+        <div class="search-container">
+            <input type="text" id="playerSearch" class="search-bar" placeholder="Search">
+            <span class="search-icon">🔍</span>
+        </div>
+    <div class="team-listing">
+        <!-- marco -->
 
-        <div class="team-listing">
     <!-- Inter Milan Squad -->
     <div class="team-group" id="inter-milan">
     <h3 class="team-title">⚫🔵 Inter Milan</h3>
@@ -550,6 +649,24 @@ padding-left: 20px;
         </table>
     </div>
 
+<!-- Add this new section before the footer -->
+<div id="rules" class="content-section">
+    <div class="team-group">
+        <h3 class="team-title">📜 قواعد الدورى</h3>
+        <ul class="rules-list">
+            <li><i class="fas fa-futbol gold-star"></i> 9 players per match (8 field + 1 goalkeeper)</li>
+            <li><i class="fas fa-futbol gold-star"></i> Unlimited substitutions during stoppages</li>
+            <li><i class="fas fa-futbol gold-star"></i> 20-minute halves (40-minute matches)</li>
+            <li><i class="fas fa-futbol gold-star"></i> 3 points for win, 1 point for draw</li>
+            <li><i class="fas fa-futbol gold-star"></i> Yellow card = 5 minute suspension</li>
+            <li><i class="fas fa-futbol gold-star"></i> Direct red card = match suspension + disciplinary review</li>
+            <li><i class="fas fa-futbol gold-star"></i> Unlimited rolling substitutions</li>
+            <li><i class="fas fa-futbol gold-star"></i> No offsides - encourage attacking play</li>
+            <li><i class="fas fa-futbol gold-star"></i> All free kicks are direct</li>
+            <li><i class="fas fa-futbol gold-star"></i> Slide tackles permitted in designated zones</li>
+        </ul>
+    </div>
+</div>
     <footer class="footer">
         <p>&copy; 2025 Marco Raafat
           <a id="linkedin" href="https://www.linkedin.com/in/marco-raafat-714885304/" target="_blank" title="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
