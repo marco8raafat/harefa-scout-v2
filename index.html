@@ -151,7 +151,9 @@ body {
     gap: 2rem;
     padding: 1rem;
 }
-
+#ruleslist{
+    direction:rtl;
+}
 .team-group {
     background: linear-gradient(145deg, var(--inter-black) 60%, var(--inter-blue));
     padding: 1.5rem;
@@ -291,6 +293,7 @@ body {
     list-style-type: none;
     padding: 0;
     margin: 1rem 0;
+    direction:rtl;
 }
 
 .rules-list li {
@@ -446,9 +449,9 @@ padding-left: 20px;
         <button class="nav-button" onclick="showSection('top-players')">
             🏆<br>Top11
         </button>
-        <!-- <button class="nav-button" onclick="showSection('rules')">
+        <button class="nav-button" onclick="showSection('rules')">
             📜<br>Rules
-        </button> -->
+        </button>
     </div>
 
     <!-- Team Analysis Section -->
@@ -652,18 +655,20 @@ padding-left: 20px;
 <!-- Add this new section before the footer -->
 <div id="rules" class="content-section">
     <div class="team-group">
-        <h3 class="team-title">📜 قواعد الدورى</h3>
+        <h3 id = "ruleslist" class="team-title">📜 قواعد الدورى</h3>
         <ul class="rules-list">
-            <li><i class="fas fa-futbol gold-star"></i> 9 players per match (8 field + 1 goalkeeper)</li>
-            <li><i class="fas fa-futbol gold-star"></i> Unlimited substitutions during stoppages</li>
-            <li><i class="fas fa-futbol gold-star"></i> 20-minute halves (40-minute matches)</li>
-            <li><i class="fas fa-futbol gold-star"></i> 3 points for win, 1 point for draw</li>
-            <li><i class="fas fa-futbol gold-star"></i> Yellow card = 5 minute suspension</li>
-            <li><i class="fas fa-futbol gold-star"></i> Direct red card = match suspension + disciplinary review</li>
-            <li><i class="fas fa-futbol gold-star"></i> Unlimited rolling substitutions</li>
-            <li><i class="fas fa-futbol gold-star"></i> No offsides - encourage attacking play</li>
-            <li><i class="fas fa-futbol gold-star"></i> All free kicks are direct</li>
-            <li><i class="fas fa-futbol gold-star"></i> Slide tackles permitted in designated zones</li>
+            <li><i class="fas fa-futbol gold-star"></i>تفاعل المحاضرات Goal</li>
+            <li><i class="fas fa-futbol gold-star"></i>تفاعل علي الجروب: فيديو 100 نقطه </li>
+            <li><i class="fas fa-futbol gold-star"></i>تفاعل علي الجروب: لوجو 60 نقطة  </li>
+            <li><i class="fas fa-futbol gold-star"></i>فكره مختلفه للتفاعل ورق تمام …الخ هتتقيم مع القاده</li>
+            <li><i class="fas fa-futbol gold-star"></i>اول جمع بالتمام علي اقل ٤ افراد ف صوره ويكونو ف الارض 2 سوبر</li>
+            <li><i class="fas fa-futbol gold-star"></i> تقييم كل رهط واجتماعه مع القاده /li>
+            <li><i class="fas fa-futbol gold-star"></i> كل فرد ف الخدمه بينزل هياخد هاتريك وهينضم للبونص الجماعي</li>
+            <li><i class="fas fa-futbol gold-star"></i>اول جمع ف الارض علطول ب سوبر</li>
+            <li><i class="fas fa-futbol gold-star"></i> حضور اجتماع مجلس الفرد ب سوبر</li>
+            <li><i class="fas fa-futbol gold-star"></i> ورقه التمام ب هاتريك</li>
+            <li><i class="fas fa-futbol gold-star"></i> ف بونص فردي علي الخدمات ع تفاعل اثناء الاجتماع ع زي وحضوره بيه كل مره ده هيتاخد فردي اه 
+                وانتو هتسجلوه وتدوهلنا نسجله عندنا كفردي وتجمعوه كتوتال ليكو عموما عشان نطلع الافراد المميزه وف نفس الوقت هتعلي من التوتال البونص فهناخده منكم ف نهايه الاجتماع</li>
         </ul>
     </div>
 </div>
