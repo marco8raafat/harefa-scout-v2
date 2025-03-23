@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="https://pngimg.com/uploads/football/football_PNG1085.png" type="">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
 <style>
     :root {
     --inter-blue: #0068A8;
@@ -38,6 +39,10 @@ body {
     min-height: 100vh;
 }
 
+::selection{
+    background: var(--inter-blue);
+    color: var(--inter-gold);
+}
 /* Inter Milan Header */
 .main-header {
     background: linear-gradient(135deg, var(--inter-black) 30%, var(--inter-blue));
@@ -58,7 +63,7 @@ body {
     left: -50%;
     width: 200%;
     height: 200%;
-   background: repeating-linear-gradient(
+    background: repeating-linear-gradient(
         45deg,
         transparent,
         transparent 15px,
@@ -94,6 +99,7 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     letter-spacing: 0.5px;
+    font-size: 1rem;
     position: relative;
     overflow: hidden;
 }
@@ -151,9 +157,7 @@ body {
     gap: 2rem;
     padding: 1rem;
 }
-#ruleslist{
-    direction:rtl;
-}
+
 .team-group {
     background: linear-gradient(145deg, var(--inter-black) 60%, var(--inter-blue));
     padding: 1.5rem;
@@ -177,7 +181,9 @@ body {
     font-size: 1.2em;
     /* animation: pulse 1s infinite ; */
 }
-
+#ruleslist{
+    direction:rtl;
+}
 .member-card {
     padding: 1rem;
     margin: 0.8rem 0;
@@ -378,7 +384,34 @@ padding-left: 20px;
 .win { background: #4CAF50; }
 .draw { background: #FFC107; }
 .loss { background: #F44336; }
+/* kjak */
+/* Add to CSS */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
+.loading-spinner {
+    border: 4px solid var(--inter-blue);
+    border-top: 4px solid var(--inter-gold);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -402,7 +435,7 @@ padding-left: 20px;
     }
     .nav-button {
         padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
     .content-section {
         margin: 1rem;
@@ -576,60 +609,60 @@ padding-left: 20px;
                 <tr>
                     <td>1</td>
                     <td>Inter Milan</td>
-                    <td>22</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>Real Madrid</td>
-                    <td>20</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>Bayern Munich</td>
-                    <td>19</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>4</td>
                     <td>Manchester City</td>
-                    <td>18</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>5</td>
                     <td>Paris Saint-Germain</td>
-                    <td>17</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>6</td>
                     <td>Liverpool</td>
-                    <td>16</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>7</td>
                     <td>Barcelona</td>
-                    <td>15</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>8</td>
                     <td>Chelsea</td>
-                    <td>14</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>9</td>
                     <td>AC Milan</td>
-                    <td>13</td>
+                    <td></td>
 
                 </tr>
                 <tr>
                     <td>10</td>
                     <td>Arsenal</td>
-                    <td>12</td>
+                    <td></td>
 
                 </tr>
             </tbody>
