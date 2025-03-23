@@ -407,7 +407,13 @@ padding-left: 20px;
     height: 40px;
     animation: spin 1s linear infinite;
 }
-
+.rules-group {
+    background: linear-gradient(145deg, var(--inter-black) 60%, var(--inter-blue));
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 6px solid var(--inter-gold);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -687,7 +693,7 @@ padding-left: 20px;
 
 <!-- Add this new section before the footer -->
 <div id="rules" class="content-section">
-    <div class="team-group">
+    <div class="rules-group">
         <h3 id = "ruleslist" class="team-title">📜 قواعد الدورى</h3>
         <ul class="rules-list">
             <li><i class="fas fa-futbol gold-star"></i>تفاعل المحاضرات Goal</li>
