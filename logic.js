@@ -25,9 +25,30 @@ const teamMapping = {
 };
 
 // Main data fetching function
+// async function fetchData() {
+//     try {
+//         // Fetch and process main team data
+//         const mainResponse = await axios.get(mainSheetURL);
+//         const mainData = Papa.parse(mainResponse.data, { header: true });
+//         updateTeamData(mainData.data);
+        
+//         // Fetch and process top players data
+//         const topPlayersResponse = await axios.get(topPlayersSheetURL);
+//         const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
+//         updateTopPlayersTable(topPlayersData.data);
+//     } catch (error) {
+//         console.error('Error fetching data:', error);
+//     }
+// }
 async function fetchData() {
+    const loader = document.createElement('div');
+    loader.className = 'loading-overlay';
+    loader.innerHTML = '<div class="loading-spinner"></div>';
+    document.body.appendChild(loader);
+
     try {
-        // Fetch and process main team data
+        // Existing fetch logic
+        
         const mainResponse = await axios.get(mainSheetURL);
         const mainData = Papa.parse(mainResponse.data, { header: true });
         updateTeamData(mainData.data);
@@ -37,7 +58,10 @@ async function fetchData() {
         const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
         updateTopPlayersTable(topPlayersData.data);
     } catch (error) {
+        // Show error message
         console.error('Error fetching data:', error);
+    } finally {
+        loader.remove();
     }
 }
 
