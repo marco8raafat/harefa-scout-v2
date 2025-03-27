@@ -51,9 +51,6 @@ body {
     border-bottom: 3px solid var(--inter-gold);
     position: relative;
     overflow: hidden;
-    /* background:url(./images/img1.jpg); */
-    /* background-size:cover; */
-    /* color:#000000 */
 }
 
 .main-header::before {
@@ -179,7 +176,6 @@ body {
 .team-title::before {
     content: '⚽';
     font-size: 1.2em;
-    /* animation: pulse 1s infinite ; */
 }
 #ruleslist{
     direction:rtl;
@@ -228,12 +224,11 @@ body {
     overflow: hidden;
     transition: transform 0.3s ease;
     border: 2px solid var(--inter-blue);
+    
 }
 
 .photo-card:hover {
-    /* transform: translateY(-5px); */
     scale: 1.05; 
-    /* update zoom */
 }
 
 .photo-card img {
@@ -258,9 +253,6 @@ body {
 .scouting-table th {
     background: linear-gradient(var(--inter-blue), var(--inter-black));
     padding: 1.2rem;
-    /* position: sticky; */
-    top: 76px;
-    backdrop-filter: blur(5px);
     border-bottom: 3px solid var(--inter-gold);
 }
 
@@ -323,9 +315,8 @@ body {
     color: var(--inter-gold);
     min-width: 20px;
 }
-/* Add this to the CSS section */
 .search-container {
-    position: relative; /* Add this to make absolute positioning work */
+    position: relative;
     padding: 0.5rem 1rem;
     display: flex;
     background: rgba(0, 0, 0, 0.9);
@@ -333,17 +324,17 @@ body {
 
 .search-icon {
     position: absolute;
-    right: 1.5rem; /* Adjust this value to align the icon properly */
+    right: 1.5rem;
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.2rem;
-    pointer-events: none; /* Ensure the icon doesn't interfere with input */
+    pointer-events: none;
     color: rgba(255, 255, 255, 0.8);
 }
 
 .search-bar {
     width: 100%;
-    padding: 0.5rem 2.5rem 0.5rem 1rem; /* Add padding on the right for the icon */
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid var(--inter-blue);
     border-radius: 25px;
@@ -434,13 +425,11 @@ padding-left: 20px;
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-buttons {
-        /* flex-direction:column; */
-        /* text-align: center; */
         gap: 0.5rem;
         padding: 0.5rem;
     }
     .nav-button {
-        padding: 0.5rem 0.8rem;
+        padding: 0.5rem 0.4rem;
         font-size: 0.75rem;
     }
     .content-section {
@@ -460,6 +449,179 @@ padding-left: 20px;
     color: var(--inter-gold);
     margin-left: 5px;
 }
+@media print {
+    body {
+        background: none !important;
+        color: #000 !important;
+        min-height: auto !important;
+    }
+
+    .main-header,
+    .nav-buttons,
+    .footer
+    /* .photo-scroll,
+    .team-listing,
+    #rules,
+    #top-players,
+    #photos,
+    #teams */ { 
+        display: none !important;
+    }
+    input[type="number"],
+    input[type="text"] {
+        color: #000 !important;
+    }
+    .print-button{
+        display: none !important;
+    }
+    @page {
+        size: auto;
+        margin: 10mm;
+    }
+}
+
+/* Attendance Section Styles */
+#attendance-section {
+    margin-top: 1rem;
+}
+
+.attendance-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.team-select, .date-picker {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--inter-blue);
+    color: rgb(14, 135, 196);
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.team-select {
+    flex: 2;
+}
+
+.date-picker {
+    flex: 1;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.attendance-table th {
+    background: var(--inter-blue);
+    padding: 1rem;
+    border-bottom: 2px solid var(--inter-gold);
+    text-align: center;
+}
+
+.attendance-table td {
+    padding: 0.8rem;
+    border: 1px solid rgba(0, 104, 168, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    position: relative;
+    text-align: center;
+}
+
+.attendance-table input[type="checkbox"] {
+    transform: scale(1.5);
+    accent-color: var(--inter-gold);
+}
+
+.attendance-table input[type="number"] {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--inter-blue);
+    color: white;
+    padding: 0.3rem;
+    width: 80px;
+    text-align: center;
+}
+
+.attendance-table input[type="text"] {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--inter-blue);
+    color: white;
+    padding: 0.3rem;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    /* Attendance Section Mobile Styles */
+    #attendance-section {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+
+    .attendance-controls {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    /* .team-select, .date-picker {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    } */
+
+    .attendance-table {
+        width: 100%;
+        font-size: 0.75rem;
+        overflow-x: auto;
+        /* display: block; */
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 0.6rem;
+        /* font-size: 0.85rem; */
+        white-space: nowrap;
+    }
+
+    .attendance-table input[type="checkbox"] {
+        transform: scale(1.2);
+    }
+
+    .attendance-table input[type="number"],
+    .attendance-table input[type="text"] {
+        width: 80%;
+        padding: 0.3rem;
+        /* font-size: 0.8rem; */
+    }
+
+    .print-button {
+        width: 100%;
+        padding: 1rem;
+    }
+
+}
+.print-button {
+    background: var(--inter-gold);
+    color: var(--inter-black);
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 1rem auto 0;
+    margin-bottom: 2rem;
+}
+
+.print-button:hover {
+    background: #ffcc00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,204,0,0.3);
+}
+
+</style>
 
 </style>
 </head>
@@ -490,6 +652,9 @@ padding-left: 20px;
         </button>
         <button class="nav-button" onclick="showSection('rules')">
             📜<br>Rules
+        </button>
+        <button class="nav-button" onclick="toggleAttendanceSection('attendance')">
+            📝<br>Tmam
         </button>
     </div>
 
@@ -711,6 +876,48 @@ padding-left: 20px;
         </ul>
     </div>
 </div>
+
+<!-- Add this after the nav buttons -->
+<section id="attendance-section" class="content-section" style="display: none;">
+    <div class="attendance-controls">
+        <select id="team-select" class="team-select">
+            <option value="">Select Team</option>
+            <option value="inter-milan">Inter Milan</option>
+            <option value="liverpool">Liverpool</option>
+            <option value="AC-milan">AC Milan</option>
+            <option value="Real-madrid">Real Madrid</option>
+            <option value="bayern">Bayern Munich</option>
+            <option value="Arsenal">Arsenal</option>
+            <option value="Paris">Paris Saint-Germain</option>
+            <option value="Manchester">Manchester City</option>
+            <option value="Barcelona">Barcelona</option>
+            <option value="Chelsea">Chelsea</option>
+        </select>
+        
+        <input type="date" id="attendance-date" class="date-picker">
+    </div>
+
+    <table class="attendance-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الأسم</th>
+                <th>حضور</th>
+                <th>غياب</th>
+                <th>ميزانية</th>
+                <th>أعذار</th>
+            </tr>
+        </thead>
+        <tbody id="attendance-body">
+            <!-- Rows will be populated automatically -->
+        </tbody>
+    </table>
+    <button class="print-button" onclick="printAttendance()">
+        🖨️ Print Attendance
+    </button>
+    <!-- <div class="space"></div> -->
+</section>
+
     <footer class="footer">
         <p>&copy; 2025 Marco Raafat
           <a id="linkedin" href="https://www.linkedin.com/in/marco-raafat-714885304/" target="_blank" title="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
