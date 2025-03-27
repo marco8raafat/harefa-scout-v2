@@ -1,11 +1,22 @@
 // Navigation handling
+
+// Modified showSection function
 function showSection(sectionId) {
-    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+    // Hide all content sections
+    document.querySelectorAll('.content-section').forEach(s => {
+        s.classList.remove('active-section');
+        s.style.display = 'none';
+    });
+    
+    // Update active button state
     document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active-button'));
-    document.getElementById(sectionId).classList.add('active-section');
+    
+    // Show requested section
+    const section = document.getElementById(sectionId);
+    section.classList.add('active-section');
+    section.style.display = 'block';
     event.currentTarget.classList.add('active-button');
 }
-
 // Sheet URLs
 const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=0&single=true&output=csv';
 const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&single=true&output=csv';
@@ -40,7 +51,6 @@ async function fetchData() {
         console.error('Error fetching data:', error);
     }
 }
-
 
 // Update team data and standings
 function updateTeamData(players) {
@@ -171,3 +181,105 @@ document.getElementById('playerSearch').addEventListener('input', function(e) {
         team.style.display = hasVisiblePlayers ? 'block' : 'none';
     });
 });
+
+// async function fetchData() {
+//     const loader = document.createElement('div');
+//     loader.className = 'loading-overlay';
+//     loader.innerHTML = '<div class="loading-spinner"></div>';
+//     document.body.appendChild(loader);
+
+//     try {
+//         // Existing fetch logic
+        
+//         const mainResponse = await axios.get(mainSheetURL);
+//         const mainData = Papa.parse(mainResponse.data, { header: true });
+//         updateTeamData(mainData.data);
+        
+//         // Fetch and process top players data
+//         const topPlayersResponse = await axios.get(topPlayersSheetURL);
+//         const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
+//         updateTopPlayersTable(topPlayersData.data);
+//     } catch (error) {
+//         // Show error message
+//         console.error('Error fetching data:', error);
+//     } finally {
+//         loader.remove();
+//     }
+// }
+
+// Attendance Section Functions
+function toggleAttendanceSection() {
+    const section = document.getElementById('attendance-section');
+
+    // Show the section each time the button is pressed
+    section.style.display = 'block';
+
+    // Update active button state
+    document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active-button'));
+    event.currentTarget.classList.add('active-button');
+
+    // Hide other sections
+    document.querySelectorAll('.content-section').forEach(s => {
+        if (s.id !== 'attendance-section') s.style.display = 'none';
+    });
+}
+
+// Populate team members when team is selected
+document.getElementById('team-select').addEventListener('change', function() {
+    const teamId = this.value;
+    const teamSection = document.getElementById(teamId);
+    const tbody = document.getElementById('attendance-body');
+    
+    tbody.innerHTML = '';
+    
+    if (teamSection) {
+        const members = teamSection.querySelectorAll('.member-card');
+        members.forEach(member => {
+            const name = member.querySelector('div:nth-child(2)').textContent;
+            if (name.toLowerCase() === 'bonus') return; // Skip rows with name BONUS
+            
+            const number = member.querySelector('.player-number').textContent;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${number}</td>
+                <td>${name}</td>
+                <td><input type="checkbox" class="attendance-checkbox"></td>
+                <td><input type="checkbox" class="absence-checkbox"></td>
+                <td><input type="number" value="0" class="budget-input"></td>
+                <td><input type="text"></td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Add a row for totals
+        const totalRow = document.createElement('tr');
+        totalRow.innerHTML = `
+            <td colspan="2"><strong>Totals</strong></td>
+            <td id="total-attendance">0</td>
+            <td id="total-absence">0</td>
+            <td id="total-budget">0</td>
+            <td></td>
+        `;
+        tbody.appendChild(totalRow);
+
+        // Update totals dynamically
+        tbody.addEventListener('input', () => {
+            const attendanceCount = tbody.querySelectorAll('.attendance-checkbox:checked').length;
+            const absenceCount = tbody.querySelectorAll('.absence-checkbox:checked').length;
+            const totalBudget = Array.from(tbody.querySelectorAll('.budget-input'))
+                .reduce((sum, input) => sum + parseFloat(input.value || 0), 0);
+
+            document.getElementById('total-attendance').textContent = attendanceCount;
+            document.getElementById('total-absence').textContent = absenceCount;
+            document.getElementById('total-budget').textContent = totalBudget;
+        });
+    }
+});
+//default date
+document.getElementById("attendance-date").valueAsDate = new Date();
+
+
+function printAttendance() {
+    window.print();
+}
