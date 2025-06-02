@@ -22,7 +22,7 @@ const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe
 const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&single=true&output=csv';
 
 // Countdown Configuration
-const targetDate = new Date("2025-06-05T19:00:00"); // June 3, 2025, 6:00 PM
+const targetDate = new Date("2025-06-03T01:50:00");
 let countdownIntervalId;
 let dataFetchIntervalId;
 
