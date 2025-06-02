@@ -23,6 +23,7 @@ const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbg
 
 // Countdown Configuration
 // const targetDate = new Date("2025-06-05T19:00:00");
+//test
 const targetDate = new Date(document.getElementById('target-date-meta').content);
 let countdownIntervalId;
 let dataFetchIntervalId;
