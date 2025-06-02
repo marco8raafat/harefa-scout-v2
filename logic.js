@@ -21,6 +21,47 @@ function showSection(sectionId) {
 const mainSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=0&single=true&output=csv';
 const topPlayersSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgKj5tqe0BVFOO-7ArgU_To2jU6pK4sWK3-nv61Tl6Zhba5Ocx6f8_cLlWgsWR1kD4Xg3W5Glm8t8/pub?gid=1567169448&single=true&output=csv';
 
+// Countdown Configuration
+const targetDate = new Date("2025-06-05T19:00:00"); // June 3, 2025, 6:00 PM
+let countdownIntervalId;
+let dataFetchIntervalId;
+
+function updateCountdownDisplay(days, hours, minutes, seconds) {
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+}
+
+function checkCountdown() {
+    const now = new Date();
+    const timeLeft = targetDate - now;
+    // Note: tableBodies selector is now handled within the if/else or by fetchData
+
+    if (timeLeft <= 0) {
+        // Countdown finished
+        clearInterval(countdownIntervalId);
+        updateCountdownDisplay(0, 0, 0, 0);
+        document.getElementById('countdown-message').textContent = "Standings are now live!";
+        
+        // fetchData will now handle making tables visible after populating them.
+        fetchData(); 
+        if (!dataFetchIntervalId) { // Ensure interval is only set once
+            dataFetchIntervalId = setInterval(fetchData, 300000); // Refresh every 5 minutes
+        }
+    } else {
+        // Countdown active
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        updateCountdownDisplay(days, hours, minutes, seconds);
+        document.getElementById('countdown-message').textContent = "Until standings are revealed!";
+        // Keep tables hidden during countdown
+        document.querySelectorAll('.scouting-table tbody').forEach(tbody => tbody.style.display = 'none');
+    }
+}
+
 // Team mapping configuration
 const teamMapping = {
     'Inter Milan': 'inter-milan',
@@ -41,14 +82,23 @@ async function fetchData() {
         // Fetch and process main team data
         const mainResponse = await axios.get(mainSheetURL);
         const mainData = Papa.parse(mainResponse.data, { header: true });
-        updateTeamData(mainData.data);
+        updateTeamData(mainData.data); // This calls updateStandings internally for the main table
         
         // Fetch and process top players data
         const topPlayersResponse = await axios.get(topPlayersSheetURL);
         const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
-        updateTopPlayersTable(topPlayersData.data);
+        updateTopPlayersTable(topPlayersData.data); // This populates the top players table
+
+        // Now that data is fetched and tables are populated, make them visible
+        document.querySelectorAll('.scouting-table tbody').forEach(tbody => {
+            tbody.style.display = ''; // Reset to default display (e.g., 'table-row-group')
+        });
+
     } catch (error) {
         console.error('Error fetching data:', error);
+        // Optionally, still show tables but empty or with an error message.
+        // For now, if there's an error, they might remain hidden or display issues
+        // depending on when the error occurred.
     }
 }
 
@@ -99,25 +149,49 @@ function updateTeamData(players) {
 
 // Update league standings
 function updateStandings(teamPoints) {
-    const tableBody = document.querySelector('.scouting-table tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    const tableBody = document.querySelector('#table .scouting-table tbody');
+    if (!tableBody) {
+        console.error("Standings table body in #table not found!");
+        return;
+    }
+    tableBody.innerHTML = ''; // Clear any existing rows, including placeholders if any were left
 
-    const standings = rows.map(row => {
-        const teamName = row.children[1].textContent;
-        const teamId = teamMapping[teamName];
-        const points = teamPoints[teamId] || 0;
-        return { row, points };
-    });
+    // Create an array of team data for sorting
+    const teamsArray = [];
+    // Iterate through teamMapping to maintain a consistent order or get display names
+    for (const teamDisplayName in teamMapping) {
+        const teamId = teamMapping[teamDisplayName];
+        teamsArray.push({
+            name: teamDisplayName, // The name to display in the table
+            id: teamId,
+            points: teamPoints[teamId] || 0
+        });
+    }
 
-    // Sort standings by points
-    standings.sort((a, b) => b.points - a.points);
+    // Sort teams by points in descending order
+    teamsArray.sort((a, b) => b.points - a.points);
 
-    // Update table positions
-    standings.forEach((standing, index) => {
-        const row = standing.row;
-        row.children[0].textContent = index + 1;
-        row.children[2].textContent = standing.points;
-        row.classList.toggle('inter-row', index < 3);
+    // Populate the table
+    teamsArray.forEach((team, index) => {
+        const row = document.createElement('tr');
+
+        const posCell = document.createElement('td');
+        posCell.textContent = index + 1;
+        row.appendChild(posCell);
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = team.name;
+        row.appendChild(nameCell);
+
+        const ptsCell = document.createElement('td');
+        ptsCell.textContent = team.points;
+        row.appendChild(ptsCell);
+
+        // Apply special styling for top 3 teams (e.g., Inter Milan theme)
+        if (index < 3) {
+            row.classList.add('inter-row');
+        }
+        
         tableBody.appendChild(row);
     });
 }
@@ -153,8 +227,12 @@ document.addEventListener('mouseout', e => {
 
 // Initial setup
 document.addEventListener('DOMContentLoaded', () => {
-    fetchData();
-    setInterval(fetchData, 300000); // Refresh every 5 minutes
+    // Initialize countdown
+    checkCountdown(); // Initial check, this will also set initial table visibility
+    countdownIntervalId = setInterval(checkCountdown, 1000); // Update countdown every second
+
+    // Note: fetchData() and its interval are now controlled by checkCountdown()
+    // The original setInterval(fetchData, 300000) is removed from here.
 });
 
 document.getElementById('playerSearch').addEventListener('input', function(e) {
@@ -182,30 +260,7 @@ document.getElementById('playerSearch').addEventListener('input', function(e) {
     });
 });
 
-// async function fetchData() {
-//     const loader = document.createElement('div');
-//     loader.className = 'loading-overlay';
-//     loader.innerHTML = '<div class="loading-spinner"></div>';
-//     document.body.appendChild(loader);
 
-//     try {
-//         // Existing fetch logic
-        
-//         const mainResponse = await axios.get(mainSheetURL);
-//         const mainData = Papa.parse(mainResponse.data, { header: true });
-//         updateTeamData(mainData.data);
-        
-//         // Fetch and process top players data
-//         const topPlayersResponse = await axios.get(topPlayersSheetURL);
-//         const topPlayersData = Papa.parse(topPlayersResponse.data, { header: true });
-//         updateTopPlayersTable(topPlayersData.data);
-//     } catch (error) {
-//         // Show error message
-//         console.error('Error fetching data:', error);
-//     } finally {
-//         loader.remove();
-//     }
-// }
 
 // Attendance Section Functions
 function toggleAttendanceSection() {
