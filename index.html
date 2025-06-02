@@ -51,6 +51,9 @@ body {
     border-bottom: 3px solid var(--inter-gold);
     position: relative;
     overflow: hidden;
+    /* background:url(./images/img1.jpg); */
+    /* background-size:cover; */
+    /* color:#000000 */
 }
 
 .main-header::before {
@@ -69,6 +72,54 @@ body {
     );
     opacity: 0.1;
     pointer-events: none;
+}
+
+/* Countdown Timer */
+#countdown-container {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    margin: 0 auto;
+    text-align: center;
+    border-bottom: 3px solid var(--inter-gold);
+}
+
+#countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.time-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-section span:first-child {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--inter-gold);
+    background: rgba(0, 104, 168, 0.3);
+    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.time-label {
+    color: white;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+#countdown-message {
+    color: var(--inter-blue);
+    font-weight: bold;
+    margin-top: 0.5rem;
 }
 
 /* Scout-themed Navigation */
@@ -176,6 +227,7 @@ body {
 .team-title::before {
     content: '⚽';
     font-size: 1.2em;
+    /* animation: pulse 1s infinite ; */
 }
 #ruleslist{
     direction:rtl;
@@ -214,7 +266,7 @@ body {
 .photo-scroll {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    gap: 2rem; 
     padding: 1rem;
 }
 
@@ -224,11 +276,12 @@ body {
     overflow: hidden;
     transition: transform 0.3s ease;
     border: 2px solid var(--inter-blue);
-    
 }
 
 .photo-card:hover {
+    /* transform: translateY(-5px); */
     scale: 1.05; 
+    /* update zoom */
 }
 
 .photo-card img {
@@ -254,6 +307,9 @@ body {
 .scouting-table th {
     background: linear-gradient(var(--inter-blue), var(--inter-black));
     padding: 1.2rem;
+    /* position: sticky; */
+    top: 76px;
+    backdrop-filter: blur(5px);
     border-bottom: 3px solid var(--inter-gold);
 }
 
@@ -316,8 +372,9 @@ body {
     color: var(--inter-gold);
     min-width: 20px;
 }
+/* Add this to the CSS section */
 .search-container {
-    position: relative;
+    position: relative; /* Add this to make absolute positioning work */
     padding: 0.5rem 1rem;
     display: flex;
     background: rgba(0, 0, 0, 0.9);
@@ -325,17 +382,17 @@ body {
 
 .search-icon {
     position: absolute;
-    right: 1.5rem;
+    right: 1.5rem; /* Adjust this value to align the icon properly */
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.2rem;
-    pointer-events: none;
+    pointer-events: none; /* Ensure the icon doesn't interfere with input */
     color: rgba(255, 255, 255, 0.8);
 }
 
 .search-bar {
     width: 100%;
-    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    padding: 0.5rem 2.5rem 0.5rem 1rem; /* Add padding on the right for the icon */
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid var(--inter-blue);
     border-radius: 25px;
@@ -426,11 +483,13 @@ padding-left: 20px;
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-buttons {
+        /* flex-direction:column; */
+        /* text-align: center; */
         gap: 0.5rem;
         padding: 0.5rem;
     }
     .nav-button {
-        padding: 0.5rem 0.4rem;
+        padding: 0.5rem 0.8rem;
         font-size: 0.75rem;
     }
     .content-section {
@@ -459,7 +518,8 @@ padding-left: 20px;
 
     .main-header,
     .nav-buttons,
-    .footer
+    .footer,
+    #countdown-container
     /* .photo-scroll,
     .team-listing,
     #rules,
@@ -621,9 +681,6 @@ padding-left: 20px;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(255,204,0,0.3);
 }
-
-</style>
-
 </style>
 </head>
 <body>
@@ -637,6 +694,29 @@ padding-left: 20px;
         </h1>
         <p>أقوى دورى كشفى</p>
     </header>
+
+    <!-- Add countdown timer -->
+    <div id="countdown-container">
+        <div id="countdown-timer">
+            <div class="time-section">
+                <span id="days">00</span>
+                <span class="time-label">Days</span>
+            </div>
+            <div class="time-section">
+                <span id="hours">00</span>
+                <span class="time-label">Hours</span>
+            </div>
+            <div class="time-section">
+                <span id="minutes">00</span>
+                <span class="time-label">Minutes</span>
+            </div>
+            <div class="time-section">
+                <span id="seconds">00</span>
+                <span class="time-label">Seconds</span>
+            </div>
+        </div>
+        <div id="countdown-message">Until standings are revealed!</div>
+    </div>
 
     <div class="nav-buttons">
         <button class="nav-button active-button" onclick="showSection('teams')">
@@ -654,8 +734,8 @@ padding-left: 20px;
         <button class="nav-button" onclick="showSection('rules')">
             📜<br>Rules
         </button>
-        <button class="nav-button" onclick="toggleAttendanceSection('attendance')">
-            📝<br>Tmam
+        <button class="nav-button" onclick="showSection('attendance-section')">
+            📋<br>Tmam
         </button>
     </div>
 
@@ -742,37 +822,37 @@ padding-left: 20px;
     <div id="photos" class="content-section">
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img4.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img4.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img1.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img1.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img2.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img2.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img3.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img3.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img5.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img5.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
         <div class="photo-scroll">
             <div class="photo-card">
-                <img src="images/img6.jpg" alt="Tactical Analysis" loading="lazy">
+                <img src="images/img6.jpg" alt="Tactical Analysis">
             </div>
             <!-- Add more scouting photos -->
         </div>
@@ -790,65 +870,7 @@ padding-left: 20px;
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Inter Milan</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Real Madrid</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Bayern Munich</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Manchester City</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Paris Saint-Germain</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Liverpool</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>Barcelona</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>Chelsea</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>AC Milan</td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>Arsenal</td>
-                    <td></td>
-
-                </tr>
+                <!-- Placeholder rows removed. This will be populated by JavaScript -->
             </tbody>
         </table>
     </div>
@@ -890,6 +912,7 @@ padding-left: 20px;
     </div>
 </div>
 
+<!-- Add this after the nav buttons -->
 <!-- Add this after the nav buttons -->
 <section id="attendance-section" class="content-section" style="display: none;">
     <div class="attendance-controls">
